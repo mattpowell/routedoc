@@ -1,0 +1,31 @@
+start = (Comment / b:Block { return b; })*
+
+Block = Comment / (__ doc:(Comment / Doc) __ route:(Comment / Route)) { return {doc: doc, route: route }}
+
+Doc = begin:DocBlockBegin doc:(a:(!DocBlockEnd b:. { return b[0]; })* { return a.join(''); }) end:DocBlockEnd { return doc.trim() }
+
+DocBlockBegin = '/**'
+DocBlockEnd = '*/' __?
+
+Route = !CommentDelimeter method:(Methods)? __ path:Path __ { return {method: method, path: path}; }
+
+Methods = 'GET' / 'POST' / 'PUT' / 'DELETE' / 'OPTIONS' / 'HEAD'
+
+Path = d:PathDelimeter p:([^\n]*) { return d + p.join(''); }
+
+// alternate version to parse out path params
+/*
+Path = &PathDelimeter p:PathParts PathDelimeter? '\n' { return p; }
+PathParts = part:(PathDelimeter p:(PathPart / Param) { return p; } )*
+Char = [a-zA-Z]
+PathPart = p:(Char+) { return {type: 'path', value: p.join('')}; }
+Param = ':' p:(Char+) { return {type: 'param', value: p.join('')} ; }
+*/
+
+PathDelimeter = '/'
+
+Comment = CommentDelimeter [^\n]* '\n' { return null; }
+CommentDelimeter = '//'
+
+// whitespace
+__ = [ \t\n\r]*
