@@ -1,0 +1,5 @@
+/**
+ * @name retrieve-todo-by-id
+ * @param {number} id - id of todo item
+ */
+GET /api/todo/:id
