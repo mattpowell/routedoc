@@ -4,13 +4,23 @@
   "description": "routedoc is a tool for documenting and generating routes.",
   "main": "index.js",
   "scripts": {
-    "test": "node tests/index.js"
+    "test": "node tests/index.js",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover test/index.js",
+    "codecov": "npm run coverage && cat coverage/lcov.info | ./node_modules/codecov/bin/codecov"
   },
   "author": "Matt Powell",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/mattpowell/routedoc.git"
+  },
   "dependencies": {
     "doctrine": "^1.2.1",
     "path-to-regexp": "^1.2.1",
     "pegjs": "^0.9.0"
+  },
+  "devDependencies": {
+    "codecov": "^1.0.1",
+    "istanbul": "^0.4.3"
   }
 }
