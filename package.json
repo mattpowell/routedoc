@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node tests/index.js",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover test/index.js",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover tests/index.js",
     "codecov": "npm run coverage && cat coverage/lcov.info | ./node_modules/codecov/bin/codecov"
   },
   "author": "Matt Powell",
