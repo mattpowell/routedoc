@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mattpowell/routedoc.svg?branch=master)](https://travis-ci.org/mattpowell/routedoc) [![codecov.io](https://codecov.io/github/mattpowell/routedoc/coverage.svg?branch=master)](https://codecov.io/github/mattpowell/routedoc?branch=master)
+[![Build Status](https://travis-ci.org/mattpowell/routedoc.svg?branch=master)](https://travis-ci.org/mattpowell/routedoc) [![codecov](https://codecov.io/gh/mattpowell/routedoc/branch/master/graph/badge.svg)](https://codecov.io/gh/mattpowell/routedoc)
 WIP
 ===
 ***
