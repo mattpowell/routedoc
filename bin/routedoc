@@ -1,0 +1,81 @@
+#! /usr/bin/env node
+var Fs = require('fs');
+var routedoc = require('../');
+
+// call routedoc w/ conf data
+function run(data) {
+  var routes = null;
+  var err;
+  try {
+    routes = routedoc({
+      conf: data,
+      mode: args.strict ? 'strict' : (args.mode ? args.mode : null)
+    });
+  }catch(e) {
+    err = e;
+  }
+  if (routes) {
+    process.stdout.write(JSON.stringify(routes, null, 2) + '\n');
+    process.exit(1);
+  }else {
+    error(err || 'An unspecified error occurred');
+  }
+}
+
+function error(msg) {
+  process.stderr.write(msg + '\n');
+  process.exit(0);
+}
+
+// make command line args an object (since we don't accept multiple arg values)
+var args = (function (argv, args) {
+  for (var x = 0; x < argv.length; x++) {
+    var arg = argv[x];
+    if (arg.slice(0, 2) === '--') {
+      var val = arg.slice(2);
+      console.log('got val', val)
+      if (val.indexOf('=') > -1) {
+        var parts = val.split('=');
+        val = parts[0];
+        argv.splice(x + 1, 0, parts[1]);
+      }
+      args[val] = (argv[x + 1] || '--').slice(0, 2) !== '--' ? argv[++x] : true; 
+    }else {
+      args[arg] = argv[++x];
+    }
+  }
+  return args;
+}(process.argv.slice(2), {}));
+
+// print help if arg was passed or invalid config was passed
+if (args.help === true || args.help === 'true' || (!args.conf && process.stdin.isTTY)) {
+  console.log('routedoc [--strict] [--mode=strict] --conf=<file>');
+  console.log('routedoc [--strict] [--mode=strict] < <file>');
+  process.exit(1);
+}
+
+// check where we need to read conf from and then go!
+if (process.stdin.isTTY) {
+
+  // read from args
+  Fs.readFile(args.conf, 'utf-8', function(err, data) {
+    if (err) error(err);
+    run(data);
+  });
+
+}else {
+
+  // read from pipe
+  var confData = '';
+  process.stdin.setEncoding('utf-8');
+  process.stdin.on('readable', function() {
+    var chunk;
+    while (chunk = process.stdin.read()) {
+      confData += chunk;
+    }
+  });
+  process.stdin.once('end', function () {
+    run(confData);
+  });
+
+}

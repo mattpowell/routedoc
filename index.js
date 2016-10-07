@@ -32,6 +32,10 @@ var api = module.exports = function(o) {
     confPath = null;
   }
 
+  if (Buffer.isBuffer(confContents)) {
+    confContents = confContents.toString();
+  }
+
   // parse!
   routes = parser
     .parse(confContents) // TODO: we should better handle parse errors.
@@ -49,7 +53,7 @@ var api = module.exports = function(o) {
       routes.forEach(function(route) {
         var method = (route.method || 'any').toLowerCase();
         server[method](route.path.value, function runHandler(req, res, next) {
-          var handler = handlers[route.name] || function(req, res, next) { next() };
+          var handler = handlers[route.name] || function(req, res, next) { next(); };
           var methods = {};
           methods[method] = true;
           req.route = {

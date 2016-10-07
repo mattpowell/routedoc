@@ -1,12 +1,15 @@
 {
   "name": "routedoc",
-  "version": "0.0.1",
-  "description": "routedoc is a tool for documenting and generating routes.",
+  "version": "0.0.3",
+  "description": "a tool for documenting and generating routes.",
   "main": "index.js",
   "scripts": {
     "test": "node tests/index.js",
     "coverage": "./node_modules/istanbul/lib/cli.js cover tests/index.js",
     "codecov": "npm run coverage && cat coverage/lcov.info | ./node_modules/codecov/bin/codecov"
+  },
+  "bin": {
+    "routedoc": "./bin/routedoc"
   },
   "author": "Matt Powell",
   "license": "MIT",
